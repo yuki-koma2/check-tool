@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>WebSocketクライアント</h2>
+<button onclick="sendMessage()">メッセージを送信</button>
+<div id="log"></div>
+
+<script>
+    const ws = new WebSocket('ws://localhost:8080');
+
+    ws.onopen = () => {
+        console.log('サーバーに接続しました');
+        document.getElementById('log').innerHTML += '<p>サーバーに接続しました</p>';
+    };
+
+    ws.onmessage = (event) => {
+        console.log('受信メッセージ:', event.data);
+        document.getElementById('log').innerHTML += `<p>受信: ${event.data}</p>`;
+    };
+
+    ws.onclose = () => {
+        console.log('サーバーとの接続が閉じられました');
+        document.getElementById('log').innerHTML += '<p>接続が切断されました</p>';
+    };
+
+    ws.onerror = (error) => {
+        console.error('WebSocket エラー:', error);
+    };
+
+    function sendMessage() {
+        const message = 'クライアントからのメッセージ';
+        ws.send(message);
+        document.getElementById('log').innerHTML += `<p>送信: ${message}</p>`;
+    }
+</script>
+</body>
+</html>
